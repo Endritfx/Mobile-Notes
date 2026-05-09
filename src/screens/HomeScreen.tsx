@@ -29,6 +29,7 @@ export default function HomeScreen({ navigation }: any) {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [notes, setNotes] = useState<any[]>([]);
+    const [isOnline, setIsOnline] = useState(true);
 
     const loadNotes = async () => {
         try {
@@ -54,6 +55,12 @@ export default function HomeScreen({ navigation }: any) {
 
     useEffect(() => {
         loadNotes();
+
+        const unsubscribe = NetInfo.addEventListener((state) => {
+            setIsOnline(!!state.isConnected);
+        });
+
+        return () => unsubscribe();
     }, []);
 
     const handleAddNote = async () => {
@@ -98,6 +105,20 @@ export default function HomeScreen({ navigation }: any) {
             >
                 My Notes 🚀
             </Text>
+            <View
+                style={{
+                    marginBottom: 20,
+                }}
+            >
+                <Text
+                    style={{
+                        color: isOnline ? "green" : "red",
+                        fontWeight: "bold",
+                    }}
+                >
+                    {isOnline ? "🟢 Online" : "🔴 Offline"}
+                </Text>
+            </View>
 
             <TextInput
                 placeholder="Title"
