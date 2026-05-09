@@ -1,9 +1,78 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { useEffect, useState } from "react";
+
+import {
+    View,
+    Text,
+    TouchableOpacity,
+    TextInput,
+    FlatList,
+} from "react-native";
 
 import { signOut } from "firebase/auth";
+
 import { auth } from "../services/firebase";
 
+import {
+    createNote,
+    getNotes,
+    deleteNote,
+} from "../services/notesService";
+
+import NetInfo from "@react-native-community/netinfo";
+
+import {
+    saveLocalNotes,
+    getLocalNotes,
+} from "../storage/localNotes";
+
 export default function HomeScreen({ navigation }: any) {
+    const [title, setTitle] = useState("");
+    const [content, setContent] = useState("");
+    const [notes, setNotes] = useState<any[]>([]);
+
+    const loadNotes = async () => {
+        try {
+            const netInfo = await NetInfo.fetch();
+
+            if (netInfo.isConnected) {
+                const data = await getNotes();
+
+                setNotes(data as any[]);
+
+                await saveLocalNotes(data as any[]);
+            } else {
+                const localData = await getLocalNotes();
+
+                setNotes(localData);
+            }
+        } catch (error) {
+            const localData = await getLocalNotes();
+
+            setNotes(localData);
+        }
+    };
+
+    useEffect(() => {
+        loadNotes();
+    }, []);
+
+    const handleAddNote = async () => {
+        if (!title || !content) return;
+
+        await createNote(title, content);
+
+        setTitle("");
+        setContent("");
+
+        loadNotes();
+    };
+
+    const handleDelete = async (id: string) => {
+        await deleteNote(id);
+
+        loadNotes();
+    };
+
     const handleLogout = async () => {
         await signOut(auth);
 
@@ -14,31 +83,122 @@ export default function HomeScreen({ navigation }: any) {
         <View
             style={{
                 flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: "white",
                 padding: 20,
+                backgroundColor: "white",
             }}
         >
             <Text
                 style={{
                     fontSize: 28,
                     fontWeight: "bold",
+                    marginTop: 60,
                     marginBottom: 20,
                     color: "black",
                 }}
             >
-                Welcome 🚀
+                My Notes 🚀
             </Text>
 
-            <Text
+            <TextInput
+                placeholder="Title"
+                placeholderTextColor="gray"
+                value={title}
+                onChangeText={setTitle}
                 style={{
-                    marginBottom: 30,
-                    color: "gray",
+                    borderWidth: 1,
+                    padding: 12,
+                    marginBottom: 10,
+                    borderRadius: 8,
+                    borderColor: "#ccc",
+                    color: "black",
+                }}
+            />
+
+            <TextInput
+                placeholder="Content"
+                placeholderTextColor="gray"
+                value={content}
+                onChangeText={setContent}
+                style={{
+                    borderWidth: 1,
+                    padding: 12,
+                    marginBottom: 10,
+                    borderRadius: 8,
+                    borderColor: "#ccc",
+                    color: "black",
+                }}
+            />
+
+            <TouchableOpacity
+                onPress={handleAddNote}
+                style={{
+                    backgroundColor: "black",
+                    padding: 15,
+                    borderRadius: 8,
+                    marginBottom: 20,
                 }}
             >
-                You are logged in.
-            </Text>
+                <Text
+                    style={{
+                        color: "white",
+                        textAlign: "center",
+                        fontWeight: "bold",
+                    }}
+                >
+                    Add Note
+                </Text>
+            </TouchableOpacity>
+
+            <FlatList
+                data={notes}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => (
+                    <View
+                        style={{
+                            borderWidth: 1,
+                            borderColor: "#ddd",
+                            padding: 15,
+                            borderRadius: 8,
+                            marginBottom: 10,
+                        }}
+                    >
+                        <Text
+                            style={{
+                                fontWeight: "bold",
+                                fontSize: 18,
+                                color: "black",
+                            }}
+                        >
+                            {item.title}
+                        </Text>
+
+                        <Text
+                            style={{
+                                marginTop: 5,
+                                color: "gray",
+                            }}
+                        >
+                            {item.content}
+                        </Text>
+
+                        <TouchableOpacity
+                            onPress={() => handleDelete(item.id)}
+                            style={{
+                                marginTop: 10,
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    color: "red",
+                                    fontWeight: "bold",
+                                }}
+                            >
+                                Delete
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                )}
+            />
 
             <TouchableOpacity
                 onPress={handleLogout}
@@ -46,7 +206,7 @@ export default function HomeScreen({ navigation }: any) {
                     backgroundColor: "red",
                     padding: 15,
                     borderRadius: 8,
-                    width: "100%",
+                    marginTop: 10,
                 }}
             >
                 <Text
