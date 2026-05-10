@@ -131,7 +131,7 @@ export default function HomeScreen({ navigation }: any) {
                     color: "black",
                 }}
             >
-                My Notes 🚀
+                My Notes
             </Text>
             <View
                 style={{
@@ -241,7 +241,7 @@ export default function HomeScreen({ navigation }: any) {
                             fontSize: 16,
                         }}
                     >
-                        No notes found 📝
+                        No notes found
                     </Text>
                 }
                 renderItem={({ item }) => (

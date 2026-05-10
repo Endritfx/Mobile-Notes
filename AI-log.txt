@@ -1,0 +1,22 @@
+AI Assistance Log
+
+Project: Mobile Cloud Notes App
+
+AI Tool Used:
+- ChatGPT
+
+Main AI Assistance Areas:
+- React Native UI development
+- Offline cache implementation
+- AsyncStorage integration
+- Network monitoring implementation
+- Automatic synchronization logic
+- Conflict handling strategy
+
+Examples of prompts used:
+- "How to implement offline cache with AsyncStorage?"
+- "How to synchronize Firestore data after reconnecting to internet?"
+- "How to implement network monitoring in React Native?"
+- "How to handle conflicts using Last Write Wins strategy?"
+
+The AI assistant was used for learning, debugging, architecture guidance, and implementation support.
