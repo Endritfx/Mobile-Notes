@@ -33,6 +33,7 @@ export default function HomeScreen({ navigation }: any) {
     const [editingId, setEditingId] = useState<string | null>(null);
     const [isOnline, setIsOnline] = useState(true);
     const [lastSync, setLastSync] = useState("");
+    const [search, setSearch] = useState("");
 
     const loadNotes = async () => {
         try {
@@ -102,6 +103,11 @@ export default function HomeScreen({ navigation }: any) {
         navigation.replace("Login");
     };
 
+    const filteredNotes = notes.filter((note) =>
+        note.title.toLowerCase().includes(search.toLowerCase()) ||
+        note.content.toLowerCase().includes(search.toLowerCase())
+    );
+
     return (
         <View
             style={{
@@ -149,6 +155,20 @@ export default function HomeScreen({ navigation }: any) {
                     Last Sync: {lastSync || "Not synced yet"}
                 </Text>
             </View>
+            <TextInput
+                placeholder="Search notes..."
+                placeholderTextColor="gray"
+                value={search}
+                onChangeText={setSearch}
+                style={{
+                    borderWidth: 1,
+                    padding: 12,
+                    marginBottom: 20,
+                    borderRadius: 8,
+                    borderColor: "#ccc",
+                    color: "black",
+                }}
+            />
 
             <TextInput
                 placeholder="Title"
@@ -201,7 +221,7 @@ export default function HomeScreen({ navigation }: any) {
             </TouchableOpacity>
 
             <FlatList
-                data={notes}
+                data={filteredNotes}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
                     <View
