@@ -119,7 +119,32 @@ The application uses:
 
 # Screenshots
 
-(Add screenshots here)
+## Login Screen
+![Login](screenshots/login-screen.png)
+
+## Register Screen
+![Register](screenshots/register-screen.png)
+
+## Notes Dashboard
+![Dashboard](screenshots/notes-dashboard.png)
+
+## Write Note
+![Write Note](screenshots/shkruarja-e-notes.png)
+
+## Dalja e Notes
+![Dalja e Notes](screenshots/Dalja-e-notes.png)
+
+## Offline Mode
+![Offline Mode](screenshots/pa-wifi.png)
+
+## 2 Notes
+![2 Notes](screenshots/2-notes.png)
+
+## Search
+![ Search](screenshots/pjesa-e-search.png)
+
+## Edit Notes
+![ Edit Notes](screenshots/edit-note.png)
 
 ---
 
