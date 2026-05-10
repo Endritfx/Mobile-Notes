@@ -56,8 +56,14 @@ export default function HomeScreen({ navigation }: any) {
     useEffect(() => {
         loadNotes();
 
-        const unsubscribe = NetInfo.addEventListener((state) => {
-            setIsOnline(!!state.isConnected);
+        const unsubscribe = NetInfo.addEventListener(async (state) => {
+            const connected = !!state.isConnected;
+
+            setIsOnline(connected);
+
+            if (connected) {
+                await loadNotes();
+            }
         });
 
         return () => unsubscribe();
