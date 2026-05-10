@@ -16,6 +16,7 @@ import {
     createNote,
     getNotes,
     deleteNote,
+    updateNote,
 } from "../services/notesService";
 
 import NetInfo from "@react-native-community/netinfo";
@@ -29,6 +30,7 @@ export default function HomeScreen({ navigation }: any) {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [notes, setNotes] = useState<any[]>([]);
+    const [editingId, setEditingId] = useState<string | null>(null);
     const [isOnline, setIsOnline] = useState(true);
 
     const loadNotes = async () => {
@@ -72,7 +74,13 @@ export default function HomeScreen({ navigation }: any) {
     const handleAddNote = async () => {
         if (!title || !content) return;
 
-        await createNote(title, content);
+        if (editingId) {
+            await updateNote(editingId, title, content);
+
+            setEditingId(null);
+        } else {
+            await createNote(title, content);
+        }
 
         setTitle("");
         setContent("");
@@ -172,7 +180,7 @@ export default function HomeScreen({ navigation }: any) {
                         fontWeight: "bold",
                     }}
                 >
-                    Add Note
+                    {editingId ? "Update Note" : "Add Note"}
                 </Text>
             </TouchableOpacity>
 
@@ -221,6 +229,25 @@ export default function HomeScreen({ navigation }: any) {
                                 }}
                             >
                                 Delete
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => {
+                                setTitle(item.title);
+                                setContent(item.content);
+                                setEditingId(item.id);
+                            }}
+                            style={{
+                                marginTop: 10,
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    color: "blue",
+                                    fontWeight: "bold",
+                                }}
+                            >
+                                Edit
                             </Text>
                         </TouchableOpacity>
                     </View>

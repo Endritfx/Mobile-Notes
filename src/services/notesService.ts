@@ -4,6 +4,7 @@ import {
     getDocs,
     deleteDoc,
     doc,
+    updateDoc,
 } from "firebase/firestore";
 
 import { auth, db } from "./firebase";
@@ -22,6 +23,7 @@ export const createNote = async (
             title,
             content,
             createdAt: Date.now(),
+            updatedAt: Date.now(),
         }
     );
 };
@@ -48,5 +50,24 @@ export const deleteNote = async (id: string) => {
 
     await deleteDoc(
         doc(db, "users", user.uid, "notes", id)
+    );
+};
+
+export const updateNote = async (
+    id: string,
+    title: string,
+    content: string
+) => {
+    const user = auth.currentUser;
+
+    if (!user) return;
+
+    await updateDoc(
+        doc(db, "users", user.uid, "notes", id),
+        {
+            title,
+            content,
+            updatedAt: Date.now(),
+        }
     );
 };
