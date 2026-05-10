@@ -88,12 +88,18 @@ export default function HomeScreen({ navigation }: any) {
         setTitle("");
         setContent("");
 
+
         loadNotes();
     };
 
     const handleDelete = async (id: string) => {
         await deleteNote(id);
 
+        if (editingId === id) {
+            setEditingId(null);
+            setTitle("");
+            setContent("");
+        }
         loadNotes();
     };
 
@@ -216,13 +222,28 @@ export default function HomeScreen({ navigation }: any) {
                         fontWeight: "bold",
                     }}
                 >
-                    {editingId ? "Update Note" : "Add Note"}
+                    {editingId ? "Save Changes" : "Add Note"}
                 </Text>
             </TouchableOpacity>
 
             <FlatList
                 data={filteredNotes}
                 keyExtractor={(item) => item.id}
+                contentContainerStyle={{
+                    paddingBottom: 100,
+                }}
+                ListEmptyComponent={
+                    <Text
+                        style={{
+                            textAlign: "center",
+                            marginTop: 40,
+                            color: "gray",
+                            fontSize: 16,
+                        }}
+                    >
+                        No notes found 📝
+                    </Text>
+                }
                 renderItem={({ item }) => (
                     <View
                         style={{
@@ -267,6 +288,7 @@ export default function HomeScreen({ navigation }: any) {
                                 Delete
                             </Text>
                         </TouchableOpacity>
+
                         <TouchableOpacity
                             onPress={() => {
                                 setTitle(item.title);
