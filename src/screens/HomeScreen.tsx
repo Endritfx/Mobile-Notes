@@ -32,6 +32,7 @@ export default function HomeScreen({ navigation }: any) {
     const [notes, setNotes] = useState<any[]>([]);
     const [editingId, setEditingId] = useState<string | null>(null);
     const [isOnline, setIsOnline] = useState(true);
+    const [lastSync, setLastSync] = useState("");
 
     const loadNotes = async () => {
         try {
@@ -43,6 +44,7 @@ export default function HomeScreen({ navigation }: any) {
                 setNotes(data as any[]);
 
                 await saveLocalNotes(data as any[]);
+                setLastSync(new Date().toLocaleTimeString());
             } else {
                 const localData = await getLocalNotes();
 
@@ -131,6 +133,20 @@ export default function HomeScreen({ navigation }: any) {
                     }}
                 >
                     {isOnline ? "🟢 Online" : "🔴 Offline"}
+                </Text>
+            </View>
+            <View
+                style={{
+                    marginBottom: 20,
+                }}
+            >
+                <Text
+                    style={{
+                        color: "gray",
+                        fontSize: 12,
+                    }}
+                >
+                    Last Sync: {lastSync || "Not synced yet"}
                 </Text>
             </View>
 
