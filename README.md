@@ -1,50 +1,128 @@
-# Welcome to your Expo app 👋
+# Mobile Cloud Notes App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A React Native mobile cloud computing application with Firebase backend, offline cache, synchronization, and conflict handling support.
 
-## Get started
+---
 
-1. Install dependencies
+# Features
 
-   ```bash
-   npm install
-   ```
+- User Authentication (Firebase Auth)
+- Cloud Database (Firestore)
+- Create, Edit, Delete Notes
+- Offline Cache Support
+- Automatic Cloud Synchronization
+- Network Status Monitoring
+- Search Notes
+- Local Storage Support
+- Conflict Handling using Last Write Wins strategy
+- Sync Metadata Tracking
 
-2. Start the app
+---
 
-   ```bash
-   npx expo start
-   ```
+# Tech Stack
 
-In the output, you'll find options to open the app in a
+## Mobile Frontend
+- React Native
+- Expo
+- TypeScript
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Cloud Backend
+- Firebase Authentication
+- Firebase Firestore Database
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Mobile Cloud Computing Features
+- Offline-first architecture
+- Cloud synchronization
+- Local cache
+- Network monitoring
+- Automatic sync recovery
 
-## Get a fresh project
+---
 
-When you're ready, run:
+# Installation
+
+## Clone repository
 
 ```bash
-npm run reset-project
+git https://github.com/Endritfx/Mobile-Notes
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Install dependencies
 
-## Learn more
+```bash
+npm install
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+## Start project
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```bash
+npx expo start
+```
 
-## Join the community
+---
 
-Join our community of developers creating universal apps.
+# Firebase Setup
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Create Firebase project:
+
+- Enable Authentication
+- Enable Email/Password login
+- Create Firestore database
+
+Create:
+
+```env
+.env
+```
+
+Add:
+
+```env
+EXPO_PUBLIC_FIREBASE_API_KEY=YOUR_KEY
+EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN=YOUR_DOMAIN
+EXPO_PUBLIC_FIREBASE_PROJECT_ID=YOUR_PROJECT_ID
+EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET=YOUR_BUCKET
+EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=YOUR_SENDER_ID
+EXPO_PUBLIC_FIREBASE_APP_ID=YOUR_APP_ID
+```
+
+---
+
+# Testing
+
+## Local Testing
+
+- Login/Register works
+- Notes CRUD works
+- Offline cache works
+- Search works
+- Network monitoring works
+
+## MCC Testing
+
+- Disable internet connection
+- Open notes from local cache
+- Re-enable internet
+- Automatic synchronization restores cloud sync
+
+---
+
+# Synchronization Strategy
+
+The application uses:
+- Local cache with AsyncStorage
+- Firebase Firestore cloud synchronization
+- Last Write Wins conflict handling strategy
+- Automatic sync recovery after reconnection
+
+---
+
+# Screenshots
+
+(Add screenshots here)
+
+---
+
+# Author
+
+Endrit Demiri
