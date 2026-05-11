@@ -5,7 +5,8 @@ import {
     Text,
     TouchableOpacity,
     TextInput,
-    FlatList,
+    ScrollView,
+    Alert,
 } from "react-native";
 
 import { signOut } from "firebase/auth";
@@ -45,6 +46,7 @@ export default function HomeScreen({ navigation }: any) {
                 setNotes(data as any[]);
 
                 await saveLocalNotes(data as any[]);
+
                 setLastSync(new Date().toLocaleTimeString());
             } else {
                 const localData = await getLocalNotes();
@@ -75,7 +77,13 @@ export default function HomeScreen({ navigation }: any) {
     }, []);
 
     const handleAddNote = async () => {
-        if (!title || !content) return;
+        if (!title || !content) {
+            Alert.alert(
+                "Missing Fields",
+                "Please enter title and content."
+            );
+            return;
+        }
 
         if (editingId) {
             await updateNote(editingId, title, content);
@@ -88,7 +96,6 @@ export default function HomeScreen({ navigation }: any) {
         setTitle("");
         setContent("");
 
-
         loadNotes();
     };
 
@@ -100,6 +107,7 @@ export default function HomeScreen({ navigation }: any) {
             setTitle("");
             setContent("");
         }
+
         loadNotes();
     };
 
@@ -109,228 +117,265 @@ export default function HomeScreen({ navigation }: any) {
         navigation.replace("Login");
     };
 
-    const filteredNotes = notes.filter((note) =>
-        note.title.toLowerCase().includes(search.toLowerCase()) ||
-        note.content.toLowerCase().includes(search.toLowerCase())
+    const filteredNotes = notes.filter(
+        (note) =>
+            note.title.toLowerCase().includes(search.toLowerCase()) ||
+            note.content.toLowerCase().includes(search.toLowerCase())
     );
 
     return (
-        <View
+        <ScrollView
             style={{
                 flex: 1,
-                padding: 20,
-                backgroundColor: "white",
+                backgroundColor: "#f3f4f6",
             }}
+            contentContainerStyle={{
+                alignItems: "center",
+                padding: 20,
+                paddingBottom: 60,
+            }}
+            showsVerticalScrollIndicator={false}
         >
-            <Text
-                style={{
-                    fontSize: 28,
-                    fontWeight: "bold",
-                    marginTop: 60,
-                    marginBottom: 20,
-                    color: "black",
-                }}
-            >
-                My Notes
-            </Text>
             <View
                 style={{
-                    marginBottom: 20,
+                    width: "100%",
+                    maxWidth: 700,
+                    backgroundColor: "white",
+                    borderRadius: 20,
+                    padding: 24,
+                    marginTop: 40,
+                    shadowColor: "#000",
+                    shadowOpacity: 0.08,
+                    shadowRadius: 10,
+                    elevation: 5,
                 }}
             >
                 <Text
                     style={{
+                        fontSize: 36,
+                        fontWeight: "bold",
+                        textAlign: "center",
+                        color: "black",
+                        marginBottom: 10,
+                    }}
+                >
+                    My Notes
+                </Text>
+
+                <Text
+                    style={{
+                        textAlign: "center",
                         color: isOnline ? "green" : "red",
                         fontWeight: "bold",
+                        fontSize: 16,
+                        marginBottom: 8,
                     }}
                 >
                     {isOnline ? "🟢 Online" : "🔴 Offline"}
                 </Text>
-            </View>
-            <View
-                style={{
-                    marginBottom: 20,
-                }}
-            >
+
                 <Text
                     style={{
+                        textAlign: "center",
                         color: "gray",
-                        fontSize: 12,
+                        marginBottom: 25,
                     }}
                 >
                     Last Sync: {lastSync || "Not synced yet"}
                 </Text>
-            </View>
-            <TextInput
-                placeholder="Search notes..."
-                placeholderTextColor="gray"
-                value={search}
-                onChangeText={setSearch}
-                style={{
-                    borderWidth: 1,
-                    padding: 12,
-                    marginBottom: 20,
-                    borderRadius: 8,
-                    borderColor: "#ccc",
-                    color: "black",
-                }}
-            />
 
-            <TextInput
-                placeholder="Title"
-                placeholderTextColor="gray"
-                value={title}
-                onChangeText={setTitle}
-                style={{
-                    borderWidth: 1,
-                    padding: 12,
-                    marginBottom: 10,
-                    borderRadius: 8,
-                    borderColor: "#ccc",
-                    color: "black",
-                }}
-            />
-
-            <TextInput
-                placeholder="Content"
-                placeholderTextColor="gray"
-                value={content}
-                onChangeText={setContent}
-                style={{
-                    borderWidth: 1,
-                    padding: 12,
-                    marginBottom: 10,
-                    borderRadius: 8,
-                    borderColor: "#ccc",
-                    color: "black",
-                }}
-            />
-
-            <TouchableOpacity
-                onPress={handleAddNote}
-                style={{
-                    backgroundColor: "black",
-                    padding: 15,
-                    borderRadius: 8,
-                    marginBottom: 20,
-                }}
-            >
-                <Text
+                <TextInput
+                    placeholder="Search notes..."
+                    placeholderTextColor="gray"
+                    value={search}
+                    onChangeText={setSearch}
                     style={{
-                        color: "white",
-                        textAlign: "center",
-                        fontWeight: "bold",
+                        borderWidth: 1,
+                        borderColor: "#ddd",
+                        borderRadius: 12,
+                        padding: 15,
+                        marginBottom: 15,
+                        color: "black",
+                        backgroundColor: "#fafafa",
+                    }}
+                />
+
+                <TextInput
+                    placeholder="Title"
+                    placeholderTextColor="gray"
+                    value={title}
+                    onChangeText={setTitle}
+                    style={{
+                        borderWidth: 1,
+                        borderColor: "#ddd",
+                        borderRadius: 12,
+                        padding: 15,
+                        marginBottom: 15,
+                        color: "black",
+                        backgroundColor: "#fafafa",
+                    }}
+                />
+
+                <TextInput
+                    placeholder="Content"
+                    placeholderTextColor="gray"
+                    value={content}
+                    onChangeText={setContent}
+                    multiline
+                    numberOfLines={4}
+                    style={{
+                        borderWidth: 1,
+                        borderColor: "#ddd",
+                        borderRadius: 12,
+                        padding: 15,
+                        marginBottom: 20,
+                        color: "black",
+                        backgroundColor: "#fafafa",
+                        height: 110,
+                        textAlignVertical: "top",
+                    }}
+                />
+
+                <TouchableOpacity
+                    onPress={handleAddNote}
+                    style={{
+                        backgroundColor: "black",
+                        padding: 18,
+                        borderRadius: 12,
+                        marginBottom: 25,
                     }}
                 >
-                    {editingId ? "Save Changes" : "Add Note"}
-                </Text>
-            </TouchableOpacity>
+                    <Text
+                        style={{
+                            color: "white",
+                            textAlign: "center",
+                            fontWeight: "bold",
+                            fontSize: 16,
+                        }}
+                    >
+                        {editingId ? "Save Changes" : "Add Note"}
+                    </Text>
+                </TouchableOpacity>
 
-            <FlatList
-                data={filteredNotes}
-                keyExtractor={(item) => item.id}
-                contentContainerStyle={{
-                    paddingBottom: 100,
-                }}
-                ListEmptyComponent={
+                {filteredNotes.length === 0 ? (
                     <Text
                         style={{
                             textAlign: "center",
-                            marginTop: 40,
                             color: "gray",
                             fontSize: 16,
+                            marginBottom: 20,
                         }}
                     >
                         No notes found
                     </Text>
-                }
-                renderItem={({ item }) => (
-                    <View
-                        style={{
-                            borderWidth: 1,
-                            borderColor: "#ddd",
-                            padding: 15,
-                            borderRadius: 8,
-                            marginBottom: 10,
-                        }}
-                    >
-                        <Text
+                ) : (
+                    filteredNotes.map((item) => (
+                        <View
+                            key={item.id}
                             style={{
-                                fontWeight: "bold",
-                                fontSize: 18,
-                                color: "black",
-                            }}
-                        >
-                            {item.title}
-                        </Text>
-
-                        <Text
-                            style={{
-                                marginTop: 5,
-                                color: "gray",
-                            }}
-                        >
-                            {item.content}
-                        </Text>
-
-                        <TouchableOpacity
-                            onPress={() => handleDelete(item.id)}
-                            style={{
-                                marginTop: 10,
+                                backgroundColor: "#fafafa",
+                                borderWidth: 1,
+                                borderColor: "#e5e5e5",
+                                borderRadius: 14,
+                                padding: 18,
+                                marginBottom: 15,
                             }}
                         >
                             <Text
                                 style={{
-                                    color: "red",
+                                    fontSize: 20,
                                     fontWeight: "bold",
+                                    color: "black",
+                                    marginBottom: 8,
                                 }}
                             >
-                                Delete
+                                {item.title}
                             </Text>
-                        </TouchableOpacity>
 
-                        <TouchableOpacity
-                            onPress={() => {
-                                setTitle(item.title);
-                                setContent(item.content);
-                                setEditingId(item.id);
-                            }}
-                            style={{
-                                marginTop: 10,
-                            }}
-                        >
                             <Text
                                 style={{
-                                    color: "blue",
-                                    fontWeight: "bold",
+                                    color: "#555",
+                                    fontSize: 15,
+                                    marginBottom: 15,
+                                    lineHeight: 22,
                                 }}
                             >
-                                Edit
+                                {item.content}
                             </Text>
-                        </TouchableOpacity>
-                    </View>
+
+                            <View
+                                style={{
+                                    flexDirection: "row",
+                                    gap: 10,
+                                }}
+                            >
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        setTitle(item.title);
+                                        setContent(item.content);
+                                        setEditingId(item.id);
+                                    }}
+                                    style={{
+                                        backgroundColor: "#2563eb",
+                                        paddingVertical: 10,
+                                        paddingHorizontal: 16,
+                                        borderRadius: 10,
+                                    }}
+                                >
+                                    <Text
+                                        style={{
+                                            color: "white",
+                                            fontWeight: "bold",
+                                        }}
+                                    >
+                                        Edit
+                                    </Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                    onPress={() => handleDelete(item.id)}
+                                    style={{
+                                        backgroundColor: "#dc2626",
+                                        paddingVertical: 10,
+                                        paddingHorizontal: 16,
+                                        borderRadius: 10,
+                                    }}
+                                >
+                                    <Text
+                                        style={{
+                                            color: "white",
+                                            fontWeight: "bold",
+                                        }}
+                                    >
+                                        Delete
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    ))
                 )}
-            />
 
-            <TouchableOpacity
-                onPress={handleLogout}
-                style={{
-                    backgroundColor: "red",
-                    padding: 15,
-                    borderRadius: 8,
-                    marginTop: 10,
-                }}
-            >
-                <Text
+                <TouchableOpacity
+                    onPress={handleLogout}
                     style={{
-                        color: "white",
-                        textAlign: "center",
-                        fontWeight: "bold",
+                        backgroundColor: "#ef4444",
+                        padding: 16,
+                        borderRadius: 12,
+                        marginTop: 10,
                     }}
                 >
-                    Logout
-                </Text>
-            </TouchableOpacity>
-        </View>
+                    <Text
+                        style={{
+                            color: "white",
+                            textAlign: "center",
+                            fontWeight: "bold",
+                            fontSize: 16,
+                        }}
+                    >
+                        Logout
+                    </Text>
+                </TouchableOpacity>
+            </View>
+        </ScrollView>
     );
 }

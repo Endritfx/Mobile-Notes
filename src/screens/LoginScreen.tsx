@@ -1,13 +1,16 @@
 import { useState } from "react";
+
 import {
     View,
     Text,
     TextInput,
     TouchableOpacity,
     Alert,
+    ScrollView,
 } from "react-native";
 
 import { signInWithEmailAndPassword } from "firebase/auth";
+
 import { auth } from "../services/firebase";
 
 export default function LoginScreen({ navigation }: any) {
@@ -15,6 +18,14 @@ export default function LoginScreen({ navigation }: any) {
     const [password, setPassword] = useState("");
 
     const handleLogin = async () => {
+
+        if (!email || !password) {
+            Alert.alert(
+                "Missing Fields",
+                "Please fill all fields."
+            );
+            return;
+        }
         try {
             await signInWithEmailAndPassword(
                 auth,
@@ -23,6 +34,7 @@ export default function LoginScreen({ navigation }: any) {
             );
 
             Alert.alert("Success", "Logged in!");
+
             navigation.navigate("Home");
         } catch (error: any) {
             Alert.alert("Login Error", error.message);
@@ -30,93 +42,128 @@ export default function LoginScreen({ navigation }: any) {
     };
 
     return (
-        <View
+        <ScrollView
             style={{
                 flex: 1,
-                justifyContent: "center",
-                padding: 20,
-                backgroundColor: "white",
+                backgroundColor: "#f3f4f6",
             }}
+            contentContainerStyle={{
+                flexGrow: 1,
+                justifyContent: "center",
+                alignItems: "center",
+                padding: 20,
+            }}
+            showsVerticalScrollIndicator={false}
         >
-            <Text
+            <View
                 style={{
-                    fontSize: 28,
-                    fontWeight: "bold",
-                    marginBottom: 20,
-                    color: "black",
-                }}
-            >
-                Login
-            </Text>
-
-            <TextInput
-                placeholder="Email"
-                placeholderTextColor="gray"
-                value={email}
-                onChangeText={setEmail}
-                autoCapitalize="none"
-                style={{
-                    borderWidth: 1,
-                    padding: 12,
-                    marginBottom: 12,
-                    borderRadius: 8,
-                    borderColor: "#ccc",
-                    color: "black",
+                    width: "100%",
+                    maxWidth: 500,
                     backgroundColor: "white",
-                }}
-            />
-
-            <TextInput
-                placeholder="Password"
-                placeholderTextColor="gray"
-                secureTextEntry
-                value={password}
-                onChangeText={setPassword}
-                style={{
-                    borderWidth: 1,
-                    padding: 12,
-                    marginBottom: 20,
-                    borderRadius: 8,
-                    borderColor: "#ccc",
-                    color: "black",
-                    backgroundColor: "white",
-                }}
-            />
-
-            <TouchableOpacity
-                onPress={handleLogin}
-                style={{
-                    backgroundColor: "black",
-                    padding: 15,
-                    borderRadius: 8,
+                    borderRadius: 20,
+                    padding: 30,
+                    shadowColor: "#000",
+                    shadowOpacity: 0.08,
+                    shadowRadius: 10,
+                    elevation: 5,
                 }}
             >
                 <Text
                     style={{
-                        color: "white",
-                        textAlign: "center",
+                        fontSize: 38,
                         fontWeight: "bold",
+                        textAlign: "center",
+                        color: "black",
+                        marginBottom: 10,
                     }}
                 >
-                    Login
+                    Welcome Back
                 </Text>
-            </TouchableOpacity>
 
-            <TouchableOpacity
-                onPress={() => navigation.navigate("Register")}
-                style={{
-                    marginTop: 15,
-                }}
-            >
                 <Text
                     style={{
                         textAlign: "center",
-                        color: "blue",
+                        color: "gray",
+                        marginBottom: 30,
+                        fontSize: 16,
                     }}
                 >
-                    Don't have an account? Register
+                    Login to continue using your notes
                 </Text>
-            </TouchableOpacity>
-        </View>
+
+                <TextInput
+                    placeholder="Email"
+                    placeholderTextColor="gray"
+                    value={email}
+                    onChangeText={setEmail}
+                    autoCapitalize="none"
+                    keyboardType="email-address"
+                    style={{
+                        borderWidth: 1,
+                        borderColor: "#ddd",
+                        borderRadius: 12,
+                        padding: 15,
+                        marginBottom: 15,
+                        color: "black",
+                        backgroundColor: "#fafafa",
+                    }}
+                />
+
+                <TextInput
+                    placeholder="Password"
+                    placeholderTextColor="gray"
+                    secureTextEntry
+                    value={password}
+                    onChangeText={setPassword}
+                    style={{
+                        borderWidth: 1,
+                        borderColor: "#ddd",
+                        borderRadius: 12,
+                        padding: 15,
+                        marginBottom: 20,
+                        color: "black",
+                        backgroundColor: "#fafafa",
+                    }}
+                />
+
+                <TouchableOpacity
+                    onPress={handleLogin}
+                    style={{
+                        backgroundColor: "black",
+                        padding: 18,
+                        borderRadius: 12,
+                        marginBottom: 15,
+                    }}
+                >
+                    <Text
+                        style={{
+                            color: "white",
+                            textAlign: "center",
+                            fontWeight: "bold",
+                            fontSize: 16,
+                        }}
+                    >
+                        Login
+                    </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    onPress={() =>
+                        navigation.navigate("Register")
+                    }
+                >
+                    <Text
+                        style={{
+                            textAlign: "center",
+                            color: "#2563eb",
+                            fontWeight: "600",
+                            fontSize: 15,
+                        }}
+                    >
+                        Don't have an account? Register
+                    </Text>
+                </TouchableOpacity>
+            </View>
+        </ScrollView>
     );
 }
