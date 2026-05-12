@@ -148,11 +148,6 @@ The application uses:
 
 ---
 
-## ScreenRecord
-![ ScreenRecord](ScreenRecord/Videoja e projektit.mp4)
-
----
-
 # Live Web Demo
 
 https://mobile-n0tes.web.app/
