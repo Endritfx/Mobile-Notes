@@ -16,16 +16,21 @@ import { auth } from "../services/firebase";
 export default function RegisterScreen({ navigation }: any) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
 
     const handleRegister = async () => {
 
         if (!email || !password) {
-            Alert.alert(
-                "Missing Fields",
-                "Please fill all fields."
-            );
+            setError("Please fill all fields.");
             return;
         }
+
+        if (password.length < 6) {
+            setError("Password must be at least 6 characters.");
+            return;
+        }
+
+        setError("");
         try {
             await createUserWithEmailAndPassword(
                 auth,
@@ -37,7 +42,7 @@ export default function RegisterScreen({ navigation }: any) {
 
             navigation.navigate("Home");
         } catch (error: any) {
-            Alert.alert("Register Error", error.message);
+            setError("Something went wrong. Try again.");
         }
     };
 
@@ -125,7 +130,18 @@ export default function RegisterScreen({ navigation }: any) {
                         backgroundColor: "#fafafa",
                     }}
                 />
-
+                {error ? (
+                    <Text
+                        style={{
+                            color: "red",
+                            marginBottom: 15,
+                            fontWeight: "bold",
+                            textAlign: "center",
+                        }}
+                    >
+                        {error}
+                    </Text>
+                ) : null}
                 <TouchableOpacity
                     onPress={handleRegister}
                     style={{

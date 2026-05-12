@@ -16,16 +16,16 @@ import { auth } from "../services/firebase";
 export default function LoginScreen({ navigation }: any) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
 
     const handleLogin = async () => {
 
         if (!email || !password) {
-            Alert.alert(
-                "Missing Fields",
-                "Please fill all fields."
-            );
+            setError("Please fill all fields.");
             return;
         }
+
+        setError("");
         try {
             await signInWithEmailAndPassword(
                 auth,
@@ -37,7 +37,7 @@ export default function LoginScreen({ navigation }: any) {
 
             navigation.navigate("Home");
         } catch (error: any) {
-            Alert.alert("Login Error", error.message);
+            setError("Invalid email or password.");
         }
     };
 
@@ -125,7 +125,18 @@ export default function LoginScreen({ navigation }: any) {
                         backgroundColor: "#fafafa",
                     }}
                 />
-
+                {error ? (
+                    <Text
+                        style={{
+                            color: "red",
+                            marginBottom: 15,
+                            fontWeight: "bold",
+                            textAlign: "center",
+                        }}
+                    >
+                        {error}
+                    </Text>
+                ) : null}
                 <TouchableOpacity
                     onPress={handleLogin}
                     style={{

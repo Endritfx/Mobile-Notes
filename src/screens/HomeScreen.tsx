@@ -35,6 +35,7 @@ export default function HomeScreen({ navigation }: any) {
     const [isOnline, setIsOnline] = useState(true);
     const [lastSync, setLastSync] = useState("");
     const [search, setSearch] = useState("");
+    const [error, setError] = useState("");
 
     const loadNotes = async () => {
         try {
@@ -78,12 +79,11 @@ export default function HomeScreen({ navigation }: any) {
 
     const handleAddNote = async () => {
         if (!title || !content) {
-            Alert.alert(
-                "Missing Fields",
-                "Please enter title and content."
-            );
+            setError("Please fill all fields.");
             return;
         }
+
+        setError("");
 
         if (editingId) {
             await updateNote(editingId, title, content);
@@ -235,6 +235,19 @@ export default function HomeScreen({ navigation }: any) {
                         textAlignVertical: "top",
                     }}
                 />
+
+                {error ? (
+                    <Text
+                        style={{
+                            color: "red",
+                            marginBottom: 15,
+                            fontWeight: "bold",
+                        }}
+                    >
+                        {error}
+                    </Text>
+                ) : null}
+
 
                 <TouchableOpacity
                     onPress={handleAddNote}
