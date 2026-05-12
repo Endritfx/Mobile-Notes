@@ -147,6 +147,12 @@ The application uses:
 ![ Edit Notes](screenshots/edit-note.png)
 
 ---
+
+## ScreenRecord
+![ ScreenRecord](ScreenRecord/Videoja e projektit.mp4)
+
+---
+
 # Live Web Demo
 
 https://mobile-n0tes.web.app/
