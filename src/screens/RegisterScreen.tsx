@@ -1,19 +1,13 @@
 import { useState } from "react";
 
-import {
-    View,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    Alert,
-    ScrollView,
-} from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Alert, ScrollView } from "react-native";
 
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
 import { auth } from "../services/firebase";
+import { router } from "expo-router";
 
-export default function RegisterScreen({ navigation }: any) {
+export default function RegisterScreen() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -32,15 +26,11 @@ export default function RegisterScreen({ navigation }: any) {
 
         setError("");
         try {
-            await createUserWithEmailAndPassword(
-                auth,
-                email,
-                password
-            );
+            await createUserWithEmailAndPassword(auth, email, password);
 
             Alert.alert("Success", "Account created!");
 
-            navigation.navigate("Home");
+            router.replace("/home");
         } catch (error: any) {
             setError("Something went wrong. Try again.");
         }
@@ -165,7 +155,7 @@ export default function RegisterScreen({ navigation }: any) {
 
                 <TouchableOpacity
                     onPress={() =>
-                        navigation.navigate("Login")
+                        router.push("/login")
                     }
                 >
                     <Text

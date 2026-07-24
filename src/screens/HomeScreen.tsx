@@ -1,33 +1,18 @@
 import { useEffect, useState } from "react";
-
-import {
-    View,
-    Text,
-    TouchableOpacity,
-    TextInput,
-    ScrollView,
-    Alert,
-} from "react-native";
+import { View, Text, TouchableOpacity, TextInput, ScrollView, Alert } from "react-native";
 
 import { signOut } from "firebase/auth";
+import { router } from "expo-router";
 
 import { auth } from "../services/firebase";
 
-import {
-    createNote,
-    getNotes,
-    deleteNote,
-    updateNote,
-} from "../services/notesService";
+import { createNote, getNotes, deleteNote, updateNote } from "../services/notesService";
 
 import NetInfo from "@react-native-community/netinfo";
 
-import {
-    saveLocalNotes,
-    getLocalNotes,
-} from "../storage/localNotes";
+import { saveLocalNotes, getLocalNotes } from "../storage/localNotes";
 
-export default function HomeScreen({ navigation }: any) {
+export default function HomeScreen() {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [notes, setNotes] = useState<any[]>([]);
@@ -114,7 +99,7 @@ export default function HomeScreen({ navigation }: any) {
     const handleLogout = async () => {
         await signOut(auth);
 
-        navigation.replace("Login");
+        router.replace("/login");
     };
 
     const filteredNotes = notes.filter(

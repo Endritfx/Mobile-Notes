@@ -1,19 +1,13 @@
 import { useState } from "react";
 
-import {
-    View,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    Alert,
-    ScrollView,
-} from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Alert, ScrollView } from "react-native";
 
 import { signInWithEmailAndPassword } from "firebase/auth";
 
 import { auth } from "../services/firebase";
+import { router } from "expo-router";
 
-export default function LoginScreen({ navigation }: any) {
+export default function LoginScreen() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -27,15 +21,11 @@ export default function LoginScreen({ navigation }: any) {
 
         setError("");
         try {
-            await signInWithEmailAndPassword(
-                auth,
-                email,
-                password
-            );
+            await signInWithEmailAndPassword(auth, email, password);
 
             Alert.alert("Success", "Logged in!");
 
-            navigation.navigate("Home");
+            router.replace("/home");
         } catch (error: any) {
             setError("Invalid email or password.");
         }
@@ -159,9 +149,7 @@ export default function LoginScreen({ navigation }: any) {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    onPress={() =>
-                        navigation.navigate("Register")
-                    }
+                    onPress={() => router.push("/register")}
                 >
                     <Text
                         style={{
