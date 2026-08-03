@@ -61,33 +61,6 @@ npx expo start
 
 ---
 
-# Firebase Setup
-
-Create Firebase project:
-
-- Enable Authentication
-- Enable Email/Password login
-- Create Firestore database
-
-Create:
-
-```env
-.env
-```
-
-Add:
-
-```env
-EXPO_PUBLIC_FIREBASE_API_KEY=YOUR_KEY
-EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN=YOUR_DOMAIN
-EXPO_PUBLIC_FIREBASE_PROJECT_ID=YOUR_PROJECT_ID
-EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET=YOUR_BUCKET
-EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=YOUR_SENDER_ID
-EXPO_PUBLIC_FIREBASE_APP_ID=YOUR_APP_ID
-```
-
----
-
 # Testing
 
 ## Local Testing
